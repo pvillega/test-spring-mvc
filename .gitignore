@@ -1,6 +1,16 @@
 *.class
 
-# Package Files #
+*.DS_Store
+bin
+target
+.classpath
+.project
+.settings
+src/main/webapp/META-INF
+.idea
+*.iml
+
+# Package Files
 *.jar
 *.war
 *.ear
