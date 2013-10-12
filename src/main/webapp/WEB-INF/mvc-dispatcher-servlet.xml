@@ -1,5 +1,6 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
@@ -15,6 +16,12 @@
         <property name="suffix" value=".jsp"/>
     </bean>
 
+    <!-- AOP logging to trace method flow of a request, added to test AOP -->
     <bean id="aopLogger" class="com.perevillega.eia.aop.logging.AOPLogger"/>
+
+    <!-- Added to load I18N resources -->
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource"
+          p:fallbackToSystemLocale="false"
+          p:basenames="WEB-INF/i18n/messages"/>
 
 </beans>
