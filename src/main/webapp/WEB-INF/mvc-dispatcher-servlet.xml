@@ -24,4 +24,18 @@
           p:fallbackToSystemLocale="false"
           p:basenames="WEB-INF/i18n/messages"/>
 
+    <!-- Add Tiles config -->
+    <bean id="tilesviewResolver" class="org.springframework.web.servlet.view.tiles3.TilesViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView"/>
+        <property name="order" value="1"/>
+    </bean>
+
+    <bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+        <property name="definitions">
+            <list>
+                <value>/WEB-INF/conf/tiles-defs.xml</value>
+            </list>
+        </property>
+    </bean>
+
 </beans>
