@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Arrays;
 
 /**
- *
+ * Cross concert logging, added to experiment with AOP pointcuts
  */
 @Aspect
 public class AOPLogger {
