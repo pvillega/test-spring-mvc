@@ -1,4 +1,4 @@
-eia-spring-mvc
+test-spring-mvc
 ==============
 
-Spring MVC pet project to learn the framework, implementing some Empire in Arms rules
+Spring MVC pet project to learn the framework
