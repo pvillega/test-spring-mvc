@@ -12,10 +12,10 @@
 <form:form action="saveUser" method="post" modelAttribute="user">
     <div>
         <p>Name</p>
-        <form:input path="name"/>
+        <form:input path="name" id="name"/>
         <form:errors path="name" cssstyle="color:red"/>
     </div>
 
-    <input name="" value="Save" type="submit">
-    <input name="" value="Reset" type="reset">
+    <input name="save" value="Save" type="submit">
+    <input name="reset" value="Reset" type="reset">
 </form:form>
