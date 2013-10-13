@@ -3,20 +3,54 @@
        xmlns:p="http://www.springframework.org/schema/p"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
 
+    <!-- Enable @Controller annotation support -->
+    <mvc:annotation-driven/>
+
+    <!-- Scan classpath for annotations (eg: @Service, @Repository etc) -->
     <context:component-scan base-package="com.perevillega.eia"/>
-    <aop:aspectj-autoproxy/>
+    <context:property-placeholder location="classpath:persistence-mysql.properties"/>
 
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="prefix" value="/WEB-INF/pages/"/>
-        <property name="suffix" value=".jsp"/>
+    <!-- Database configuration -->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+          p:driverClassName="${jdbc.driverClassName}" p:url="${jdbc.url}" p:username="${jdbc.username}"
+          p:password="${jdbc.password}">
     </bean>
 
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="com.perevillega.eia"/>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.format_sql">true</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="persistenceExceptionTranslationPostProcessor"
+          class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+
+    <!-- enable the configuration of transactional behavior based on annotations -->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
     <!-- AOP logging to trace method flow of a request, added to test AOP -->
+    <aop:aspectj-autoproxy/>
+
     <bean id="aopLogger" class="com.perevillega.eia.aop.logging.AOPLogger"/>
 
     <!-- Added to load I18N resources -->
@@ -25,6 +59,11 @@
           p:basenames="WEB-INF/i18n/messages"/>
 
     <!-- Add Tiles config -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/pages/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
     <bean id="tilesviewResolver" class="org.springframework.web.servlet.view.tiles3.TilesViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView"/>
         <property name="order" value="1"/>
@@ -39,3 +78,4 @@
     </bean>
 
 </beans>
+
